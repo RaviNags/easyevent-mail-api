@@ -1,3 +1,4 @@
+import com.easyevent.sendingemailmodule.model.EmailTemplate;
 import com.easyevent.sendingemailmodule.service.SendEmailService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +18,6 @@ public class SendEmailTest {
     @Autowired
     private SendEmailService sendEmailService;
 
-
     @Test
     public final void sendEmailtest() throws IOException {
         ArrayList<String> to = new ArrayList<String>();
@@ -27,7 +27,6 @@ public class SendEmailTest {
         Map<String, String> params = new HashMap<String, String>();
         params.put("recipientFirstName", "Nag's");
         params.put("recipientLastName", "Ravi");
-        String apiKey = "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";
-        sendEmailService.sendTransactionalMail(to, 2, params, apiKey);
+        sendEmailService.sendTransactionalMail(to, EmailTemplate.REGISTER, params);
     }
 }

@@ -3,9 +3,11 @@ package com.easyevent.sendingemailmodule.model;
 import com.squareup.okhttp.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
+@Service
 public class SendEmail {
 
     public void sendTransactionalMail () throws IOException {
@@ -24,9 +26,6 @@ public class SendEmail {
         Response response = client.newCall(request).execute();
     }
 
-
-
-
     public void sendMail() throws IOException {
         OkHttpClient client = new OkHttpClient();
 
@@ -40,18 +39,4 @@ public class SendEmail {
 
         Response response = client.newCall(request).execute();
     }
-
-
-   /* @SpringBootApplication
-    public static class SendinblueApplication {
-
-        public static void main(String[] args) throws IOException {
-            SpringApplication.run(SendinblueApplication.class, args);
-
-
-            SendEmail sendEmail = new SendEmail();
-            sendEmail.sendTransactionalMail();
-            sendEmail.sendMail();
-        }
-    }*/
 }

@@ -1,8 +1,11 @@
 package com.easyevent.sendingemailmodule.service;
 
+import com.easyevent.sendingemailmodule.config.EmailSettingConfig;
+import com.easyevent.sendingemailmodule.model.EmailTemplate;
 import com.squareup.okhttp.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,7 +14,10 @@ import java.util.Map;
 @Service
 public class SendEmailService {
 
-    public ResponseBody sendTransactionalMail (ArrayList<String> to, int templateId, Map<String, String> params, String apiKey) throws IOException {
+    @Autowired
+    private EmailSettingConfig config;
+
+    public ResponseBody sendTransactionalMail (ArrayList<String> to, EmailTemplate template, Map<String, String> params) throws IOException {
 
         JSONArray emails = new JSONArray();
         to.forEach(e->{
@@ -20,12 +26,11 @@ public class SendEmailService {
             emails.put(jsonObject);
         });
 
-
         OkHttpClient client = new OkHttpClient();
 
         JSONObject content = new JSONObject("{\"sender\":{\"name\":\"Easyevent\",\"email\":\"contact@easyevent.fr\"}}");
         content.put("to", emails);
-        content.put("templateId", templateId);
+        content.put("templateId", template.getTemplateId());
         content.put("params", params);
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(mediaType, String.valueOf(content));
@@ -34,7 +39,7 @@ public class SendEmailService {
                 .post(body)
                 .addHeader("accept", "application/json")
                 .addHeader("content-type", "application/json")
-                .addHeader("api-key", apiKey)
+                .addHeader("api-key", config.getKey())
                 .build();
 
         Response response = client.newCall(request).execute();

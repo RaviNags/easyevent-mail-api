@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.easyevent.sendingemail-module</groupId>
-    <artifactId>sendingemail-module</artifactId>
+    <groupId>com.easyevent.sendingemail-lib</groupId>
+    <artifactId>sendingemail-lib</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -71,7 +71,4 @@
             <version>2.8.6</version>
         </dependency>
     </dependencies>
-
-
-
 </project>

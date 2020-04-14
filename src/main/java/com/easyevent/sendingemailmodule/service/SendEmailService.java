@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -17,7 +18,7 @@ public class SendEmailService {
     @Autowired
     private EmailSettingConfig config;
 
-    public ResponseBody sendTransactionalMail (ArrayList<String> to, EmailTemplate template, Map<String, String> params) throws IOException {
+    public ResponseBody sendTransactionalMail (List<String> to, EmailTemplate template, Map<String, String> params) throws IOException {
 
         JSONArray emails = new JSONArray();
         to.forEach(e->{

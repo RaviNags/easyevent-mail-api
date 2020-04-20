@@ -2,8 +2,9 @@ package com.easyevent.sendingemailmodule.model;
 
 public enum EmailTemplate {
 
-    REGISTER(1),
-    HEBDO_SITUATION(2);
+    HEBDO_SITUATION(1),
+    REGISTER(3),
+    COLLABORATOR_INVITATION(4);
 
     private final int templateId;
 

@@ -18,7 +18,7 @@ public class SendEmailService {
     @Autowired
     private EmailSettingConfig config;
 
-    public ResponseBody sendTransactionalMail (List<String> to, EmailTemplate template, Map<String, String> params) throws IOException {
+    public ResponseBody sendTransactionalMail (List<String> to, EmailTemplate template, Map<String, Object> params) throws IOException {
 
         JSONArray emails = new JSONArray();
         to.forEach(e->{

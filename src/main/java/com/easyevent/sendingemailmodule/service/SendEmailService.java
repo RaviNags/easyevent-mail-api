@@ -1,49 +1,64 @@
 package com.easyevent.sendingemailmodule.service;
 
 import com.easyevent.sendingemailmodule.config.EmailSettingConfig;
+import com.easyevent.sendingemailmodule.model.EmailMessage;
 import com.easyevent.sendingemailmodule.model.EmailTemplate;
-import com.squareup.okhttp.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.easyevent.sendingemailmodule.model.SenderMessage;
+import com.easyevent.sendingemailmodule.model.ToMessage;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.*;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
-import java.io.IOException;
+import org.springframework.web.client.RestTemplate;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class SendEmailService {
 
-    @Autowired
-    private EmailSettingConfig config;
+    private final EmailSettingConfig config;
 
-    public ResponseBody sendTransactionalMail (List<String> to, EmailTemplate template, Map<String, Object> params) throws IOException {
+    private final RestTemplate restTemplate;
 
-        JSONArray emails = new JSONArray();
-        to.forEach(e->{
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("email", e);
-            emails.put(jsonObject);
+    private static String EMAIL_SERVICE_URL = "https://api.sendinblue.com/v3/smtp/email";
+
+    public SendEmailService(EmailSettingConfig config, RestTemplateBuilder restTemplateBuilder) {
+        this.config = config;
+        this.restTemplate = restTemplateBuilder.build();
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+
+    }
+
+    public Object sendTransactionalMail(List<String> to, EmailTemplate template, Map<String, Object> params) {
+
+        List<ToMessage> emails = new ArrayList<>();
+        to.forEach(email -> {
+            emails.add(new ToMessage(email));
         });
 
-        OkHttpClient client = new OkHttpClient();
+        EmailMessage message = new EmailMessage(
+                new SenderMessage("Easyevent", "contact@easyevent.fr"),
+                emails,
+                template.getTemplateId(),
+                params
+        );
 
-        JSONObject content = new JSONObject("{\"sender\":{\"name\":\"Easyevent\",\"email\":\"contact@easyevent.fr\"}}");
-        content.put("to", emails);
-        content.put("templateId", template.getTemplateId());
-        content.put("params", params);
-        MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, String.valueOf(content));
-        Request request = new Request.Builder()
-                .url("https://api.sendinblue.com/v3/smtp/email")
-                .post(body)
-                .addHeader("accept", "application/json")
-                .addHeader("content-type", "application/json")
-                .addHeader("api-key", config.getKey())
-                .build();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.set("content-type", "application/json");
+        headers.set("api-key", config.getKey());
 
-        Response response = client.newCall(request).execute();
-        return response.body();
+        // build the request
+        HttpEntity<EmailMessage> request = new HttpEntity<>(message, headers);
+
+        ResponseEntity<Object> response = this.restTemplate.exchange(SendEmailService.EMAIL_SERVICE_URL, HttpMethod.POST, request, Object.class, 1);
+        if (response.getStatusCode() == HttpStatus.OK) {
+            return response.getBody();
+        } else {
+            return null;
+        }
     }
 }

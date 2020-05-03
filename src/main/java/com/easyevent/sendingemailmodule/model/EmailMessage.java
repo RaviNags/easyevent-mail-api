@@ -1,5 +1,6 @@
 package com.easyevent.sendingemailmodule.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Value;
 
 import java.util.List;
@@ -12,6 +13,7 @@ public class EmailMessage {
 
     List<ToMessage> to;
 
+    @JsonProperty("templateId")
     Integer templateId;
 
     Map<String, Object> params;

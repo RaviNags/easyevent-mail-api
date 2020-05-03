@@ -55,10 +55,7 @@ public class SendEmailService {
         HttpEntity<EmailMessage> request = new HttpEntity<>(message, headers);
 
         ResponseEntity<Object> response = this.restTemplate.exchange(SendEmailService.EMAIL_SERVICE_URL, HttpMethod.POST, request, Object.class, 1);
-        if (response.getStatusCode() == HttpStatus.OK) {
-            return response.getBody();
-        } else {
-            return null;
-        }
+        return response.getStatusCode() == HttpStatus.OK ?
+                response.getBody() : null;
     }
 }

@@ -5,7 +5,8 @@ public enum EmailTemplate {
     HEBDO_SITUATION(1),
     REGISTER(3),
     COLLABORATOR_INVITATION(4),
-    RESA_CONTACT(6);
+    RESA_CONTACT(6),
+    DEVIS(7);
 
     private final int templateId;
 

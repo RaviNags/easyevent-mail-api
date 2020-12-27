@@ -6,7 +6,8 @@ public enum EmailTemplate {
     REGISTER(3),
     COLLABORATOR_INVITATION(4),
     RESA_CONTACT(6),
-    DEVIS(7);
+    DEVIS(7),
+    SUBSCRIPTIONS_SUCCESS(8);
 
     private final int templateId;
 

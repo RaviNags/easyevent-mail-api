@@ -29,7 +29,6 @@ public class SendEmailService {
         this.config = config;
         this.restTemplate = restTemplateBuilder.build();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-
     }
 
     public Object sendTransactionalMail(List<String> to, EmailTemplate template, Map<String, Object> params) {

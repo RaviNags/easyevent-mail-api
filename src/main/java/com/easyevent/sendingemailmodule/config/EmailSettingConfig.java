@@ -14,7 +14,5 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 public class EmailSettingConfig {
-
     private String key;
-
 }
